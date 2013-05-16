@@ -19,6 +19,7 @@
 		C933BE1817449203006EA1AB /* MTZViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C933BE1717449203006EA1AB /* MTZViewController.m */; };
 		C933BE1B17449204006EA1AB /* MTZViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C933BE1917449204006EA1AB /* MTZViewController_iPhone.xib */; };
 		C933BE1E17449204006EA1AB /* MTZViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = C933BE1C17449204006EA1AB /* MTZViewController_iPad.xib */; };
+		C933BE261744A1FD006EA1AB /* MTZHandyPinchGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = C933BE251744A1FD006EA1AB /* MTZHandyPinchGestureRecognizer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,8 @@
 		C933BE1717449203006EA1AB /* MTZViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTZViewController.m; sourceTree = "<group>"; };
 		C933BE1A17449204006EA1AB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MTZViewController_iPhone.xib; sourceTree = "<group>"; };
 		C933BE1D17449204006EA1AB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MTZViewController_iPad.xib; sourceTree = "<group>"; };
+		C933BE241744A1FD006EA1AB /* MTZHandyPinchGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTZHandyPinchGestureRecognizer.h; sourceTree = SOURCE_ROOT; };
+		C933BE251744A1FD006EA1AB /* MTZHandyPinchGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTZHandyPinchGestureRecognizer.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +92,8 @@
 				C933BE0E17449203006EA1AB /* MTZAppDelegate.m */,
 				C933BE1617449203006EA1AB /* MTZViewController.h */,
 				C933BE1717449203006EA1AB /* MTZViewController.m */,
+				C933BE241744A1FD006EA1AB /* MTZHandyPinchGestureRecognizer.h */,
+				C933BE251744A1FD006EA1AB /* MTZHandyPinchGestureRecognizer.m */,
 				C933BE1917449204006EA1AB /* MTZViewController_iPhone.xib */,
 				C933BE1C17449204006EA1AB /* MTZViewController_iPad.xib */,
 				C933BE0517449203006EA1AB /* Supporting Files */,
@@ -181,6 +186,7 @@
 				C933BE0B17449203006EA1AB /* main.m in Sources */,
 				C933BE0F17449203006EA1AB /* MTZAppDelegate.m in Sources */,
 				C933BE1817449203006EA1AB /* MTZViewController.m in Sources */,
+				C933BE261744A1FD006EA1AB /* MTZHandyPinchGestureRecognizer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
