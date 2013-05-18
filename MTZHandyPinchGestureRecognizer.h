@@ -10,7 +10,8 @@
 
 typedef enum {
 	MTZHandidnessLeft,
-	MTZHandidnessRight
+	MTZHandidnessRight,
+	MTZHandidnessUnknown
 } MTZHandidness;
 
 @interface MTZHandyPinchGestureRecognizer : UIPinchGestureRecognizer

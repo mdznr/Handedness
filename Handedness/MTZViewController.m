@@ -45,19 +45,27 @@
 	[_zoomPercentage setHidden:YES];
 	[self.view addSubview:_zoomPercentage];
 	
-	_labelOffset = 100;
+	_labelOffset = 64;
 }
 
 - (void)didPinch:(id)sender
 {
-	if ( [sender isKindOfClass:[UIPinchGestureRecognizer class]] ) {
-		UIPinchGestureRecognizer *sendr = (UIPinchGestureRecognizer *) sender;
+	if ( [sender isKindOfClass:[MTZHandyPinchGestureRecognizer class]] ) {
+		MTZHandyPinchGestureRecognizer *sendr = (MTZHandyPinchGestureRecognizer *) sender;
 		switch ( sendr.state ) {
 			case UIGestureRecognizerStateBegan:
 				_gestureStartSize = _viewToScale.bounds.size;
-			default:
+			case UIGestureRecognizerStateChanged:
 				[self scaleThatView:sendr.scale];
 				[self showScaleForPinch:sendr];
+				break;
+			case UIGestureRecognizerStateCancelled:
+			case UIGestureRecognizerStateEnded:
+			case UIGestureRecognizerStateFailed:
+				[self showScaleForPinch:sendr];
+				break;
+			default:
+				break;
 		}
 	}
 }
@@ -78,19 +86,27 @@
 		case UIGestureRecognizerStateBegan:
 			// Show popover
 			[_zoomPercentage setHidden:NO];
+			
 			// Find center
 			CGPoint center = [sender locationInView:self.view];
+			
 			// Check handedness and adjust center accordingly
 			if ( sender.hand == MTZHandidnessLeft ) {
 				center.x += _labelOffset;
+				center.y -= _labelOffset;
 				NSLog(@"left");
-			} else {
+			} else if ( sender.hand == MTZHandidnessRight ) {
 				center.x -= _labelOffset;
+				center.y -= _labelOffset;
 				NSLog(@"right");
+			} else {
+				NSLog(@"undecided");
 			}
-			center.y -= _labelOffset/2;
+			
+			
 			// Show it at the appropriate place
 			[_zoomPercentage setCenter:center];
+			
 		case UIGestureRecognizerStateChanged:
 			// Update text
 			[_zoomPercentage setText:[NSString stringWithFormat:@"%.0f%%", 100 * sender.scale]];
