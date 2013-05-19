@@ -90,13 +90,13 @@
 	if ( rect.origin.x < padding ) {
 		rect.origin.x = padding;
 	} else if ( [UIScreen mainScreen].bounds.size.width - (rect.origin.x + rect.size.width) < padding ) {
-		rect.origin.x = [UIScreen mainScreen].bounds.size.width - padding;
+		rect.origin.x = [UIScreen mainScreen].bounds.size.width - rect.size.width - padding;
 	}
 	
 	if ( rect.origin.y < padding ) {
 		rect.origin.y = padding;
 	} else if ( [UIScreen mainScreen].bounds.size.height - (rect.origin.y + rect.size.height) < padding ) {
-		rect.origin.y = [UIScreen mainScreen].bounds.size.height - padding;
+		rect.origin.y = [UIScreen mainScreen].bounds.size.height - rect.size.height - padding;
 	}
 	
 	return rect;
