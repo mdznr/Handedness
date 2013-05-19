@@ -83,6 +83,25 @@
 	[_viewToScale setFrame:(CGRect){x, y, w, h}];
 }
 
+- (CGRect)getRectWithinScreen:(CGRect)rect
+{
+	CGFloat padding = 10;
+	
+	if ( rect.origin.x < padding ) {
+		rect.origin.x = padding;
+	} else if ( [UIScreen mainScreen].bounds.size.width - (rect.origin.x + rect.size.width) < padding ) {
+		rect.origin.x = [UIScreen mainScreen].bounds.size.width - padding;
+	}
+	
+	if ( rect.origin.y < padding ) {
+		rect.origin.y = padding;
+	} else if ( [UIScreen mainScreen].bounds.size.height - (rect.origin.y + rect.size.height) < padding ) {
+		rect.origin.y = [UIScreen mainScreen].bounds.size.height - padding;
+	}
+	
+	return rect;
+}
+
 - (void)showScaleForPinch:(MTZHandyPinchGestureRecognizer *)sender
 {
 	switch ( sender.state ) {
@@ -106,8 +125,12 @@
 				NSLog(@"undecided");
 			}
 			
+			
 			// Show it at the appropriate place
 			[_zoomPercentage setCenter:center];
+			
+			// Make sure it's an appropriate distance away from edges
+			_zoomPercentage.frame = [self getRectWithinScreen:_zoomPercentage.frame];
 			
 		case UIGestureRecognizerStateChanged:
 			// Set zoom level
