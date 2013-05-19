@@ -6,8 +6,11 @@
 //  Copyright (c) 2013 Matt Zanchelli. All rights reserved.
 //
 
+#import <QuartzCore/QuartzCore.h>
+
 #import "MTZViewController.h"
 #import "MTZHandyPinchGestureRecognizer.h"
+#import "MTZZoomLevelPopover.h"
 
 @interface MTZViewController ()
 
@@ -15,7 +18,7 @@
 @property CGSize fullSize;
 @property CGSize gestureStartSize;
 
-@property UILabel *zoomPercentage;
+@property (strong, nonatomic) MTZZoomLevelPopover *zoomPercentage;
 @property CGFloat labelOffset;
 
 @end
@@ -27,22 +30,22 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
 	
+	[self.view setBackgroundColor:[UIColor underPageBackgroundColor]];
+	
 	_viewToScale = [[UIView alloc] initWithFrame:self.view.bounds];
 	[_viewToScale setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-	[_viewToScale setBackgroundColor:[UIColor lightGrayColor]];
+	[_viewToScale setBackgroundColor:[UIColor whiteColor]];
+	[_viewToScale.layer setShadowColor:[UIColor blackColor].CGColor];
+	[_viewToScale.layer setShadowOpacity:0.75f];
+	[_viewToScale.layer setShadowOffset:(CGSize){0,1}];
+	[_viewToScale.layer setShadowRadius:2];
 	_fullSize = _viewToScale.bounds.size;
 	[self.view addSubview:_viewToScale];
 	
 	MTZHandyPinchGestureRecognizer *pinch = [[MTZHandyPinchGestureRecognizer alloc] initWithTarget:self action:@selector(didPinch:)];
 	[self.view addGestureRecognizer:pinch];
 	
-	_zoomPercentage = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 128, 50)];
-	[_zoomPercentage setUserInteractionEnabled:NO];
-	[_zoomPercentage setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.75f]];
-	[_zoomPercentage setTextAlignment:NSTextAlignmentCenter];
-	[_zoomPercentage setTextColor:[UIColor whiteColor]];
-	[_zoomPercentage setNumberOfLines:1];
-	[_zoomPercentage setHidden:YES];
+	_zoomPercentage = [[MTZZoomLevelPopover alloc] initWithFrame:CGRectMake(0, 0, 128, 50)];
 	[self.view addSubview:_zoomPercentage];
 	
 	_labelOffset = 64;
@@ -76,8 +79,8 @@
 	CGFloat h = _gestureStartSize.height * scale;
 	CGFloat x = _viewToScale.center.x - (w/2);
 	CGFloat y = _viewToScale.center.y - (h/2);
+	
 	[_viewToScale setFrame:(CGRect){x, y, w, h}];
-	[_viewToScale setCenter:self.view.center];
 }
 
 - (void)showScaleForPinch:(MTZHandyPinchGestureRecognizer *)sender
@@ -103,15 +106,12 @@
 				NSLog(@"undecided");
 			}
 			
-			
 			// Show it at the appropriate place
 			[_zoomPercentage setCenter:center];
 			
 		case UIGestureRecognizerStateChanged:
-			// Update text
-			[_zoomPercentage setText:[NSString stringWithFormat:@"%.0f%%", 100 * sender.scale]];
-			// Make sure it fits
-			[_zoomPercentage sizeToFit];
+			// Set zoom level
+			[_zoomPercentage setZoomLevel:(_viewToScale.bounds.size.width / _fullSize.width)];
 			break;
 		case UIGestureRecognizerStateEnded:
 		case UIGestureRecognizerStateCancelled:

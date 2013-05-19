@@ -44,11 +44,11 @@
 	
 	// Find which finger is on top
 	CGFloat topFinger, bottomFinger;
-	if ( one.y + 16 < two.y ) {
+	if ( one.y + 24 < two.y ) {
 		// One is on top
 		topFinger = one.x;
 		bottomFinger = two.x;
-	} else if ( two.y + 16 < one.y ) {
+	} else if ( two.y + 24 < one.y ) {
 		// Two is on top
 		topFinger = two.x;
 		bottomFinger = one.x;
