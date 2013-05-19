@@ -32,8 +32,12 @@
 	
 	[self.view setBackgroundColor:[UIColor underPageBackgroundColor]];
 	
-	_viewToScale = [[UIView alloc] initWithFrame:self.view.bounds];
-	[_viewToScale setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+	CGRect rect = self.view.bounds;
+	rect.origin.y += 20;
+	rect.origin.x += 20;
+	rect.size.width -= 40;
+	rect.size.height -= 40;
+	_viewToScale = [[UIView alloc] initWithFrame:rect];
 	[_viewToScale setBackgroundColor:[UIColor whiteColor]];
 	[_viewToScale.layer setShadowColor:[UIColor blackColor].CGColor];
 	[_viewToScale.layer setShadowOpacity:0.75f];
