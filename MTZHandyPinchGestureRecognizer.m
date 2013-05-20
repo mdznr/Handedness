@@ -62,14 +62,10 @@
 
 // Expects exactly two touches
 - (void)determineHandednessForTouches:(NSSet *)touches
-{
-	// Get UITouch objects
-	UITouch *fingerOne = touches.allObjects[0];
-	UITouch *fingerTwo = touches.allObjects[1];
-	
+{	
 	// Get the points of each finger
-	CGPoint one = [fingerOne locationInOwnWindow];
-	CGPoint two = [fingerTwo locationInOwnWindow];
+	CGPoint one = [touches.allObjects[0] locationInOwnWindow];
+	CGPoint two = [touches.allObjects[1] locationInOwnWindow];
 	
 	// Find which finger is on top
 	CGFloat topFinger, bottomFinger;
@@ -89,45 +85,12 @@
 	
 	// Find if it's left or right
 	if ( topFinger + 32 < bottomFinger ) {
-		_hand = MTZHandednessLeft
-		;
+		_hand = MTZHandednessLeft;
 	} else if ( topFinger > bottomFinger + 32 ) {
 		_hand = MTZHandednessRight;
 	} else {
 		// The fingers are two close together to tell
 		_hand = MTZHandednessUnknown;
-	}
-}
-
-// Expects exactly two touches
-// Uses slope to determine handedness
-- (void)altDetermineHandednessForTouches:(NSSet *)touches
-{
-	// Get the points of each finger
-	CGPoint one = [touches.allObjects[0] locationInOwnWindow];
-	CGPoint two = [touches.allObjects[1] locationInOwnWindow];
-	
-	// Find which finger is on top
-	if ( one.y + 24 < two.y ) {
-		// One is on top
-	} else if ( two.y + 24 < one.y ) {
-		// Two is on top, switch
-		CGPoint alt = one;
-		one = two;
-		two = alt;
-	} else {
-		// The fingers are two close together to tell
-		_hand = MTZHandednessUnknown;
-		return;
-	}
-	
-	CGFloat slope = (one.y-two.y)/(one.x-two.x);
-	
-	// May seem backwards, but remember that going down is increasing y.
-	if ( slope > 0 ) {
-		_hand = MTZHandednessLeft;
-	} else {
-		_hand = MTZHandednessRight;
 	}
 }
 
@@ -142,11 +105,7 @@
 	[super touchesMoved:touches withEvent:event];
 	
 	if ( self.state == UIGestureRecognizerStateBegan ) {
-		NSDate *now = [NSDate date];
-		[self altDetermineHandednessForTouches:_myTouches];
-		NSDate *after = [NSDate date];
 		[self determineHandednessForTouches:_myTouches];
-		NSLog(@"%f %f", [after timeIntervalSinceNow], [now timeIntervalSinceDate:after]);
 	}
 }
 
