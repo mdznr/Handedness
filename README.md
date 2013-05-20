@@ -6,6 +6,8 @@
 
 A handy `UIPinchGestureRecognizer` subclass that makes it easy to find handedness of the gesture.
 
+![Screenshot](Screenshot.png)
+
 ---
 
 This repo includes header and implementation files as well as example code on how to handle views accordingly.
