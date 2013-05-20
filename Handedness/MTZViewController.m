@@ -142,7 +142,7 @@
 	switch ( sender.state ) {
 		case UIGestureRecognizerStateBegan:
 			// Show popover
-			[_zoomPercentage setHidden:NO];
+			[_zoomPercentage show];
 			
 			// Find center
 			CGPoint center = [sender locationInView:self.view];
@@ -173,7 +173,8 @@
 			break;
 		case UIGestureRecognizerStateEnded:
 		case UIGestureRecognizerStateCancelled:
-			[_zoomPercentage setHidden:YES];	// Hide popover
+			// Hide the popover
+			[_zoomPercentage hide];
 		default:
 			break;
 	}

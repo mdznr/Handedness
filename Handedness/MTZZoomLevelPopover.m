@@ -92,17 +92,26 @@
 	[self setHidden:YES];
 }
 
+- (void)show
+{
+	[self setAlpha:1.0f];
+	[self setHidden:NO];
+}
+
 - (void)hide
 {
 	[UIView beginAnimations:nil context:nil];
+	[UIView setAnimationBeginsFromCurrentState:YES];
+	[UIView setAnimationDuration:0.15f];
 	[UIView setAnimationDidStopSelector:@selector(setHidden)];
-	[self setHidden:YES];
+	[self setAlpha:0.0f];
 	[UIView commitAnimations];
 }
 
 - (void)setHidden
 {
 	[self setHidden:YES];
+	[self setAlpha:1.0f];
 }
 
 - (void)setZoomLevel:(CGFloat)zoomLevel

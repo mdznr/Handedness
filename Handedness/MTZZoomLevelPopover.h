@@ -39,4 +39,7 @@
 
 @property (nonatomic) CGFloat zoomLevel;
 
+- (void)hide;
+- (void)show;
+
 @end
