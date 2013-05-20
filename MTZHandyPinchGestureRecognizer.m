@@ -36,6 +36,8 @@
 #import "MTZHandyPinchGestureRecognizer.h"
 #import <UIKit/UIGestureRecognizerSubclass.h>
 
+#import "UITouch+locationInOwnWindow.h"
+
 @interface MTZHandyPinchGestureRecognizer ()
 
 // Which hand is being used to perform this pinch?
@@ -66,8 +68,8 @@
 	UITouch *fingerTwo = touches.allObjects[1];
 	
 	// Get the points of each finger
-	CGPoint one = [fingerOne locationInView:fingerOne.window];
-	CGPoint two = [fingerTwo locationInView:fingerTwo.window];
+	CGPoint one = [fingerOne locationInOwnWindow];
+	CGPoint two = [fingerTwo locationInOwnWindow];
 	
 	// Find which finger is on top
 	CGFloat topFinger, bottomFinger;
@@ -97,6 +99,38 @@
 	}
 }
 
+// Expects exactly two touches
+// Uses slope to determine handedness
+- (void)altDetermineHandednessForTouches:(NSSet *)touches
+{
+	// Get the points of each finger
+	CGPoint one = [touches.allObjects[0] locationInOwnWindow];
+	CGPoint two = [touches.allObjects[1] locationInOwnWindow];
+	
+	// Find which finger is on top
+	if ( one.y + 24 < two.y ) {
+		// One is on top
+	} else if ( two.y + 24 < one.y ) {
+		// Two is on top, switch
+		CGPoint alt = one;
+		one = two;
+		two = alt;
+	} else {
+		// The fingers are two close together to tell
+		_hand = MTZHandednessUnknown;
+		return;
+	}
+	
+	CGFloat slope = (one.y-two.y)/(one.x-two.x);
+	
+	// May seem backwards, but remember that going down is increasing y.
+	if ( slope > 0 ) {
+		_hand = MTZHandednessLeft;
+	} else {
+		_hand = MTZHandednessRight;
+	}
+}
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
 	[super touchesBegan:touches withEvent:event];
@@ -108,7 +142,11 @@
 	[super touchesMoved:touches withEvent:event];
 	
 	if ( self.state == UIGestureRecognizerStateBegan ) {
+		NSDate *now = [NSDate date];
+		[self altDetermineHandednessForTouches:_myTouches];
+		NSDate *after = [NSDate date];
 		[self determineHandednessForTouches:_myTouches];
+		NSLog(@"%f %f", [after timeIntervalSinceNow], [now timeIntervalSinceDate:after]);
 	}
 }
 
