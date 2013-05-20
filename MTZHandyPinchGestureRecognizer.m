@@ -32,7 +32,7 @@
 }
 
 // Expects exactly two touches
-- (void)determineHandidnessForTouches:(NSSet *)touches
+- (void)determineHandednessForTouches:(NSSet *)touches
 {
 	// Get UITouch objects
 	UITouch *fingerOne = touches.allObjects[0];
@@ -81,7 +81,7 @@
 	[super touchesMoved:touches withEvent:event];
 	
 	if ( self.state == UIGestureRecognizerStateBegan ) {
-		[self determineHandidnessForTouches:_myTouches];
+		[self determineHandednessForTouches:_myTouches];
 	}
 }
 
