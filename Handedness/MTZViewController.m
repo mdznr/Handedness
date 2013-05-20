@@ -38,6 +38,10 @@
 	rect.size.width -= 40;
 	rect.size.height -= 40;
 	_viewToScale = [[UIView alloc] initWithFrame:rect];
+	[_viewToScale setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin  |
+	                                  UIViewAutoresizingFlexibleRightMargin |
+	                                  UIViewAutoresizingFlexibleTopMargin   |
+	                                  UIViewAutoresizingFlexibleBottomMargin];
 	[_viewToScale setBackgroundColor:[UIColor whiteColor]];
 	[_viewToScale.layer setShadowColor:[UIColor blackColor].CGColor];
 	[_viewToScale.layer setShadowOpacity:0.75f];
