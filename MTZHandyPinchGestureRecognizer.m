@@ -58,8 +58,6 @@
 		return;
 	}
 	
-	NSLog(@"%f %f", topFinger, bottomFinger);
-	
 	// Find if it's left or right
 	if ( topFinger + 32 < bottomFinger ) {
 		_hand = MTZHandidnessLeft;

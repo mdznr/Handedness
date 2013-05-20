@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 
 typedef enum {
+	MTZHandidnessUnknown,
 	MTZHandidnessLeft,
-	MTZHandidnessRight,
-	MTZHandidnessUnknown
+	MTZHandidnessRight
 } MTZHandidness;
 
 @interface MTZHandyPinchGestureRecognizer : UIPinchGestureRecognizer
