@@ -121,11 +121,11 @@
 			CGPoint center = [sender locationInView:self.view];
 			
 			// Check handedness and adjust center accordingly
-			if ( sender.hand == MTZHandidnessLeft ) {
+			if ( sender.hand == MTZHandednessLeft ) {
 				center.x += _labelOffset;
 				center.y -= _labelOffset;
 				NSLog(@"left");
-			} else if ( sender.hand == MTZHandidnessRight ) {
+			} else if ( sender.hand == MTZHandednessRight ) {
 				center.x -= _labelOffset;
 				center.y -= _labelOffset;
 				NSLog(@"right");

@@ -12,7 +12,7 @@
 @interface MTZHandyPinchGestureRecognizer ()
 
 // Which hand is being used to perform this pinch?
-@property (nonatomic, readwrite) MTZHandidness hand;
+@property (nonatomic, readwrite) MTZHandedness hand;
 
 // If actually implemented by UIKit, it would be replaced with 'touches'
 @property (nonatomic, strong) NSMutableSet *myTouches;
@@ -54,18 +54,19 @@
 		bottomFinger = one.x;
 	} else {
 		// The fingers are two close together to tell
-		_hand = MTZHandidnessUnknown;
+		_hand = MTZHandednessUnknown;
 		return;
 	}
 	
 	// Find if it's left or right
 	if ( topFinger + 32 < bottomFinger ) {
-		_hand = MTZHandidnessLeft;
+		_hand = MTZHandednessLeft
+		;
 	} else if ( topFinger > bottomFinger + 32 ) {
-		_hand = MTZHandidnessRight;
+		_hand = MTZHandednessRight;
 	} else {
 		// The fingers are two close together to tell
-		_hand = MTZHandidnessUnknown;
+		_hand = MTZHandednessUnknown;
 	}
 }
 
@@ -101,7 +102,7 @@
 - (void)reset
 {
 	[super reset];
-	_hand = MTZHandidnessUnknown;
+	_hand = MTZHandednessUnknown;
 	_myTouches = [[NSMutableSet alloc] initWithCapacity:2];
 }
 
