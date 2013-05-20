@@ -78,7 +78,7 @@
 }
 
 - (void)scaleThatView:(CGFloat)scale
-{
+{	
 	CGFloat w = _gestureStartSize.width * scale;
 	CGFloat h = _gestureStartSize.height * scale;
 	CGFloat x = _viewToScale.center.x - (w/2);
@@ -88,7 +88,7 @@
 }
 
 - (CGRect)getRectWithinScreen:(CGRect)rect
-{
+{	
 	CGFloat padding = 10;
 	
 	if ( rect.origin.x < padding ) {

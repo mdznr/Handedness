@@ -39,8 +39,8 @@
 	UITouch *fingerTwo = touches.allObjects[1];
 	
 	// Get the points of each finger
-	CGPoint one = [fingerOne locationInView:fingerOne.view];
-	CGPoint two = [fingerTwo locationInView:fingerTwo.view];
+	CGPoint one = [fingerOne locationInView:fingerOne.window];
+	CGPoint two = [fingerTwo locationInView:fingerTwo.window];
 	
 	// Find which finger is on top
 	CGFloat topFinger, bottomFinger;
@@ -54,18 +54,20 @@
 		bottomFinger = one.x;
 	} else {
 		// The fingers are two close together to tell
-		self.hand = MTZHandidnessUnknown;
+		_hand = MTZHandidnessUnknown;
 		return;
 	}
 	
+	NSLog(@"%f %f", topFinger, bottomFinger);
+	
 	// Find if it's left or right
 	if ( topFinger + 32 < bottomFinger ) {
-		self.hand = MTZHandidnessLeft;
+		_hand = MTZHandidnessLeft;
 	} else if ( topFinger > bottomFinger + 32 ) {
-		self.hand = MTZHandidnessRight;
+		_hand = MTZHandidnessRight;
 	} else {
 		// The fingers are two close together to tell
-		self.hand = MTZHandidnessUnknown;
+		_hand = MTZHandidnessUnknown;
 	}
 }
 
@@ -88,6 +90,9 @@
 {
 	[super touchesEnded:touches withEvent:event];
 	[_myTouches minusSet:touches];
+	if ( _myTouches.count == 0 ) {
+		_myTouches = [[NSMutableSet alloc] initWithCapacity:2];
+	}
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
@@ -98,7 +103,8 @@
 - (void)reset
 {
 	[super reset];
-	self.hand = MTZHandidnessUnknown;
+	_hand = MTZHandidnessUnknown;
+	_myTouches = [[NSMutableSet alloc] initWithCapacity:2];
 }
 
 - (void)ignoreTouch:(UITouch *)touch forEvent:(UIEvent *)event
