@@ -38,3 +38,4 @@ Where advances in hardware could be useful:
 * It would also be nice to be able to have access to more primitive data about the touch and possibly determine the handedness based on the shape of each touch (using a very similar algorithm this may be able to be determined).
 
 * If hardware technology were able to tell when things are in near proximity to the display, detecting areas where the screen are obstructed would be trivial. "Shadows" of the users fingers could be made and this class could be rebuilt.
+
