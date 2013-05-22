@@ -36,8 +36,6 @@
 #import "MTZHandyPinchGestureRecognizer.h"
 #import <UIKit/UIGestureRecognizerSubclass.h>
 
-#import "UITouch+locationInOwnWindow.h"
-
 @interface MTZHandyPinchGestureRecognizer ()
 
 // Which hand is being used to perform this pinch?
@@ -60,12 +58,12 @@
 	return self;
 }
 
-// Expects exactly two touches
-- (void)determineHandednessForTouches:(NSSet *)touches
+// Expects two touches
+- (void)determineHandedness
 {	
 	// Get the points of each finger
-	CGPoint one = [touches.allObjects[0] locationInOwnWindow];
-	CGPoint two = [touches.allObjects[1] locationInOwnWindow];
+	CGPoint one = [self locationOfTouch:0 inView:self.view];
+	CGPoint two = [self locationOfTouch:1 inView:self.view];
 	
 	// Find which finger is on top
 	CGFloat topFinger, bottomFinger;
@@ -105,7 +103,7 @@
 	[super touchesMoved:touches withEvent:event];
 	
 	if ( self.state == UIGestureRecognizerStateBegan ) {
-		[self determineHandednessForTouches:_myTouches];
+		[self determineHandedness];
 	}
 }
 
