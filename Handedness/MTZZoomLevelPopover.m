@@ -36,6 +36,8 @@
 #import "MTZZoomLevelPopover.h"
 #import <QuartzCore/QuartzCore.h>
 
+#define MTZ_DEVICE_IS_RETINA ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)] && ([UIScreen mainScreen].scale == 2.0))
+
 @interface MTZZoomLevelPopover ()
 
 @property (strong, nonatomic) UILabel *label;
@@ -123,9 +125,16 @@
 	// Fit and center around label width
 	CGRect rect = [_label textRectForBounds:(CGRect){0, 0, FLT_MAX, FLT_MAX} limitedToNumberOfLines:1];
 	CGPoint center = self.center;
-	[self setFrame:(CGRect){round(self.frame.origin.x), round(self.frame.origin.y), round(rect.size.width) + 16, round(rect.size.height) + 10}];
-	[self setCenter:(CGPoint){round(center.x), round(center.y)}];
-	[_label setCenter:(CGPoint){round(self.bounds.size.width/2), round(self.bounds.size.height/2)}];
+	
+	if ( MTZ_DEVICE_IS_RETINA ) {
+		[self setFrame:(CGRect){round(self.frame.origin.x*2)/2, round(self.frame.origin.y*2)/2, round(rect.size.width*2)/2 + 16, round(rect.size.height*2)/2 + 10}];
+		[self setCenter:(CGPoint){round(center.x*2)/2, round(center.y*2)/2}];
+		[_label setCenter:(CGPoint){round(self.bounds.size.width)/2, round(self.bounds.size.height)/2}];
+	} else {
+		[self setFrame:(CGRect){round(self.frame.origin.x), round(self.frame.origin.y), round(rect.size.width) + 16, round(rect.size.height) + 10}];
+		[self setCenter:(CGPoint){round(center.x), round(center.y)}];
+		[_label setCenter:(CGPoint){round(self.bounds.size.width/2), round(self.bounds.size.height/2)}];
+	}
 	
 	_zoomLevel = zoomLevel;
 }
