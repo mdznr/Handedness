@@ -36,8 +36,6 @@
 #import "MTZZoomLevelPopover.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define MTZ_DEVICE_IS_RETINA ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)] && ([UIScreen mainScreen].scale == 2.0))
-
 @interface MTZZoomLevelPopover ()
 
 @property (strong, nonatomic) UILabel *label;
@@ -126,15 +124,10 @@
 	CGRect rect = [_label textRectForBounds:(CGRect){0, 0, FLT_MAX, FLT_MAX} limitedToNumberOfLines:1];
 	CGPoint center = self.center;
 	
-	if ( MTZ_DEVICE_IS_RETINA ) {
-		[self setFrame:(CGRect){round(self.frame.origin.x*2)/2, round(self.frame.origin.y*2)/2, round(rect.size.width*2)/2 + 16, round(rect.size.height*2)/2 + 10}];
-		[self setCenter:(CGPoint){round(center.x*2)/2, round(center.y*2)/2}];
-		[_label setCenter:(CGPoint){round(self.bounds.size.width)/2, round(self.bounds.size.height)/2}];
-	} else {
-		[self setFrame:(CGRect){round(self.frame.origin.x), round(self.frame.origin.y), round(rect.size.width) + 16, round(rect.size.height) + 10}];
-		[self setCenter:(CGPoint){round(center.x), round(center.y)}];
-		[_label setCenter:(CGPoint){round(self.bounds.size.width/2), round(self.bounds.size.height/2)}];
-	}
+	CGFloat scale = [UIScreen mainScreen].scale;
+	[self setFrame:(CGRect){round(self.frame.origin.x * scale)/scale, round(self.frame.origin.y * scale)/scale, round(rect.size.width * scale)/scale + 16, round(rect.size.height * scale)/scale + 10}];
+	[self setCenter:(CGPoint){round(center.x * scale)/scale, round(center.y * scale)/scale}];
+	[_label setCenter:(CGPoint){round((self.bounds.size.width/2) * scale)/scale, round((self.bounds.size.height/2)*scale)/scale}];
 	
 	_zoomLevel = zoomLevel;
 }
