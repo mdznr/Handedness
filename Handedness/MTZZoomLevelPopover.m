@@ -117,13 +117,13 @@
 - (void)setZoomLevel:(CGFloat)zoomLevel
 {
 	// Update text
-	[_label setText:[NSString stringWithFormat:@"%.0f%%", 100 * zoomLevel]];
+	NSString *text = [NSString stringWithFormat:@"%.0f%%", 100 * zoomLevel];
+	[_label setText:text];
 	
-	// Make sure it fits
-	[_label sizeToFit];
-	CGRect rect = [_label textRectForBounds:(CGRect){0,0,FLT_MAX,FLT_MAX} limitedToNumberOfLines:1];
+	// Fit and center around label width
+	CGRect rect = [_label textRectForBounds:(CGRect){0, 0, FLT_MAX, FLT_MAX} limitedToNumberOfLines:1];
 	CGPoint center = self.center;
-	[self setFrame:(CGRect){self.frame.origin.x, self.frame.origin.y, round(rect.size.width) + 16, round(rect.size.height) + 10}];
+	[self setFrame:(CGRect){round(self.frame.origin.x), round(self.frame.origin.y), round(rect.size.width) + 16, round(rect.size.height) + 10}];
 	[self setCenter:(CGPoint){round(center.x), round(center.y)}];
 	[_label setCenter:(CGPoint){round(self.bounds.size.width/2), round(self.bounds.size.height/2)}];
 	
