@@ -71,9 +71,9 @@
 	                                  UIViewAutoresizingFlexibleBottomMargin];
 	[_viewToScale setBackgroundColor:[UIColor whiteColor]];
 	[_viewToScale.layer setShadowColor:[UIColor blackColor].CGColor];
-	[_viewToScale.layer setShadowOpacity:0.75f];
+	[_viewToScale.layer setShadowOpacity:0.15f];
 	[_viewToScale.layer setShadowOffset:(CGSize){0,1}];
-	[_viewToScale.layer setShadowRadius:2];
+	[_viewToScale.layer setShadowRadius:1];
 	_fullSize = _viewToScale.bounds.size;
 	[self.view addSubview:_viewToScale];
 	
