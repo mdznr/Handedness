@@ -82,10 +82,10 @@
 	MTZHandyPinchGestureRecognizer *pinch = [[MTZHandyPinchGestureRecognizer alloc] initWithTarget:self action:@selector(didPinch:)];
 	[self.view addGestureRecognizer:pinch];
 	
-	_zoomPercentage = [[MTZZoomLevelPopover alloc] initWithFrame:CGRectMake(0, 0, 128, 50)];
+	_zoomPercentage = [[MTZZoomLevelPopover alloc] init];
 	[self.view addSubview:_zoomPercentage];
 	
-	_labelOffset = 100;
+	_labelOffset = 128;
 	
 	_movePopoverContinuouslyWithGesture = YES;
 }
@@ -122,16 +122,22 @@
 {	
 	CGFloat padding = 10;
 	
+	CGSize screen = [UIScreen mainScreen].bounds.size;
+#pragma mark There has to be a better way of finding screen size for orientation
+	if ( UIInterfaceOrientationIsLandscape([[UIDevice currentDevice] orientation]) ) {
+		screen = (CGSize){screen.height, screen.width};
+	}
+	
 	if ( rect.origin.x < padding ) {
 		rect.origin.x = padding;
-	} else if ( [UIScreen mainScreen].bounds.size.width - (rect.origin.x + rect.size.width) < padding ) {
-		rect.origin.x = [UIScreen mainScreen].bounds.size.width - rect.size.width - padding;
+	} else if ( screen.width - (rect.origin.x + rect.size.width) < padding ) {
+		rect.origin.x = screen.width - rect.size.width - padding;
 	}
 	
 	if ( rect.origin.y < padding ) {
 		rect.origin.y = padding;
-	} else if ( [UIScreen mainScreen].bounds.size.height - (rect.origin.y + rect.size.height) < padding ) {
-		rect.origin.y = [UIScreen mainScreen].bounds.size.height - rect.size.height - padding;
+	} else if ( screen.height - (rect.origin.y + rect.size.height) < padding ) {
+		rect.origin.y = screen.height - rect.size.height - padding;
 	}
 	
 	return rect;
@@ -167,12 +173,11 @@
 				[self movePopoverAwayFromPoint:[sender locationInView:self.view]
 								 forHandedness:sender.hand];
 			}
-			break;
 		case UIGestureRecognizerStateEnded:
 		case UIGestureRecognizerStateCancelled:
+		default:
 			// Hide the popover
 			[_zoomPercentage hide];
-		default:
 			break;
 	}
 	
