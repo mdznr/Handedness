@@ -73,63 +73,99 @@
 
 - (void)setup
 {
-	[self setUserInteractionEnabled:NO];
-	[self setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.75f]];
+	self.userInteractionEnabled = NO;
+	self.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.75];
 	
-	[self.layer setCornerRadius:4.0f];
+	self.layer.cornerRadius = 4.0f;
 	
 	_label = [[UILabel alloc] initWithFrame:self.bounds];
-	[_label setAutoresizingMask:UIViewAutoresizingFlexibleHeight |
-	                            UIViewAutoresizingFlexibleWidth];
-	[_label setTextAlignment:NSTextAlignmentCenter];
-	[_label setTextColor:[UIColor whiteColor]];
-	[_label setFont:[UIFont boldSystemFontOfSize:24.0f]];
-	[_label setNumberOfLines:1];
-	[_label setBackgroundColor:[UIColor clearColor]];
-	[_label setOpaque:NO];
+	_label.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+	_label.textAlignment = NSTextAlignmentCenter;
+	_label.textColor = [UIColor whiteColor];
+	if ( [UIFont instancesRespondToSelector:@selector(preferredFontForTextStyle:)] ) {
+		_label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+	} else {
+		_label.font = [UIFont boldSystemFontOfSize:18.0f];
+	}
+	_label.numberOfLines = 1;
+	_label.backgroundColor = [UIColor clearColor];
+	_label.opaque = NO;
 	[self addSubview:_label];
 	
-	[self setHidden:YES];
+	self.hidden = YES;
+	
+	if ( &UIContentSizeCategoryDidChangeNotification != nil ) {
+		// Listen to UIContentSizeCategoryDidChangeNotification (Dynamic Type)
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(preferredContentSizeDidChange:)
+													 name:UIContentSizeCategoryDidChangeNotification
+												   object:nil];
+	}
 }
 
 - (void)show
 {
-	[self setAlpha:1.0f];
-	[self setHidden:NO];
+	self.alpha = 1.0f;
+	self.hidden = NO;
 }
 
 - (void)hide
 {
-	[UIView beginAnimations:nil context:nil];
-	[UIView setAnimationBeginsFromCurrentState:YES];
-	[UIView setAnimationDuration:0.15f];
-	[UIView setAnimationDidStopSelector:@selector(setHidden)];
-	[self setAlpha:0.0f];
-	[UIView commitAnimations];
+	if ( [UIView instancesRespondToSelector:@selector(animateWithDuration:delay:usingSpringWithDamping:initialSpringVelocity:options:animations:completion:)] ) {
+		[UIView animateWithDuration:0.15f
+							  delay:0.0f
+			 usingSpringWithDamping:1.0f
+			  initialSpringVelocity:1.0f
+							options:UIViewAnimationOptionBeginFromCurrentState
+						 animations:^{
+							 self.alpha = 0.0f;
+						 }
+						 completion:^(BOOL finished) {
+							 [self setHidden];
+						 }];
+	} else {
+		[UIView animateWithDuration:0.15f
+							  delay:0.0f
+							options:UIViewAnimationOptionBeginFromCurrentState
+						 animations:^{
+							 self.alpha = 0.0f;
+						 } completion:^(BOOL finished) {
+							 [self setHidden];
+						 }];
+	}
 }
 
 - (void)setHidden
 {
-	[self setHidden:YES];
-	[self setAlpha:1.0f];
+	self.hidden = YES;
+	self.alpha = 1.0f;
 }
 
 - (void)setZoomLevel:(CGFloat)zoomLevel
 {
 	// Update text
-	NSString *text = [NSString stringWithFormat:@"%.0f%%", 100 * zoomLevel];
-	[_label setText:text];
+	_label.text = [NSString stringWithFormat:@"%.0f%%", 100 * zoomLevel];
 	
 	// Fit and center around label width
-	CGRect rect = [_label textRectForBounds:(CGRect){0, 0, FLT_MAX, FLT_MAX} limitedToNumberOfLines:1];
-	CGPoint center = self.center;
-	
+	CGRect rect = [_label textRectForBounds:(CGRect){0, 0, FLT_MAX, FLT_MAX}
+					 limitedToNumberOfLines:1];
 	CGFloat scale = [UIScreen mainScreen].scale;
-	[self setFrame:(CGRect){round(self.frame.origin.x * scale)/scale, round(self.frame.origin.y * scale)/scale, round(rect.size.width * scale)/scale + 16, round(rect.size.height * scale)/scale + 10}];
-	[self setCenter:(CGPoint){round(center.x * scale)/scale, round(center.y * scale)/scale}];
-	[_label setCenter:(CGPoint){round((self.bounds.size.width/2) * scale)/scale, round((self.bounds.size.height/2)*scale)/scale}];
+	
+	self.bounds = (CGRect){0, 0,
+		                   round(rect.size.width  * scale)/scale + 16,
+		                   round(rect.size.height * scale)/scale + 10};
+	
+	_label.center = (CGPoint){round((self.bounds.size.width /2) * scale)/scale,
+		                      round((self.bounds.size.height/2) * scale)/scale};
 	
 	_zoomLevel = zoomLevel;
+}
+
+// Dynamic type size changed
+- (void)preferredContentSizeDidChange:(id)sender
+{
+	_label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+#pragma mark Do other things need to be changed?
 }
 
 @end
