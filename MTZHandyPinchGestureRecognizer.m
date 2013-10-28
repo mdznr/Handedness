@@ -36,6 +36,9 @@
 #import "MTZHandyPinchGestureRecognizer.h"
 #import <UIKit/UIGestureRecognizerSubclass.h>
 
+#define Y_TOLERANCE 24.0f
+#define X_TOLERANCE 32.0f
+
 @interface MTZHandyPinchGestureRecognizer ()
 
 // Which hand is being used to perform this pinch?
@@ -60,18 +63,23 @@
 
 // Expects two touches
 - (void)determineHandedness
-{	
+{
+	if ( self.numberOfTouches < 2 ) {
+		NSLog(@"MTZHandyPinchGestureRecognizer determineHandedness expects 2 touches");
+		return;
+	}
+	
 	// Get the points of each finger
 	CGPoint one = [self locationOfTouch:0 inView:self.view];
 	CGPoint two = [self locationOfTouch:1 inView:self.view];
 	
 	// Find which finger is on top
 	CGFloat topFinger, bottomFinger;
-	if ( one.y + 24 < two.y ) {
+	if ( one.y + Y_TOLERANCE < two.y ) {
 		// One is on top
 		topFinger = one.x;
 		bottomFinger = two.x;
-	} else if ( two.y + 24 < one.y ) {
+	} else if ( two.y + Y_TOLERANCE < one.y ) {
 		// Two is on top
 		topFinger = two.x;
 		bottomFinger = one.x;
@@ -82,9 +90,9 @@
 	}
 	
 	// Find if it's left or right
-	if ( topFinger + 32 < bottomFinger ) {
+	if ( topFinger + X_TOLERANCE < bottomFinger ) {
 		_hand = MTZHandednessLeft;
-	} else if ( topFinger > bottomFinger + 32 ) {
+	} else if ( topFinger > bottomFinger + X_TOLERANCE ) {
 		_hand = MTZHandednessRight;
 	} else {
 		// The fingers are two close together to tell
