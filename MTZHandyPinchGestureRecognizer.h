@@ -36,13 +36,16 @@
 #import <UIKit/UIKit.h>
 
 typedef enum {
-	MTZHandednessUnknown,
-	MTZHandednessLeft,
-	MTZHandednessRight
+	MTZHandednessUnknown, /* The handedness is unknown as it could not be determined */
+	MTZHandednessLeft,    /* The left hand */
+	MTZHandednessRight    /* The right hand */
 } MTZHandedness;
 
 @interface MTZHandyPinchGestureRecognizer : UIPinchGestureRecognizer
 
+/// The hand most likely used to perform this gesture
 @property (nonatomic, readonly) MTZHandedness hand;
+
+#pragma mark possible API for which areas of screen are "blocked"?
 
 @end
