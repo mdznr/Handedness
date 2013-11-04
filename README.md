@@ -7,6 +7,7 @@
 A handy `UIPinchGestureRecognizer` subclass that makes it easy to find handedness of the gesture.
 
 ![Screenshot of handedness in use](Screenshot.png "Screenshot of handedness in use")
+
 If the use pinches with their right-hand, the zoom-level popover will appear on screen left of their hand instead of appearing obstructed by their hand.
 
 ---
