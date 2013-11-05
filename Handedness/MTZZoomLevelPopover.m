@@ -165,7 +165,7 @@
 - (void)preferredContentSizeDidChange:(id)sender
 {
 	_label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-#pragma mark Do other things need to be changed?
+#warning Do other things need to be changed?
 }
 
 @end
