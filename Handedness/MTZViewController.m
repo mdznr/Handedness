@@ -54,6 +54,9 @@
 
 @implementation MTZViewController
 
+
+#pragma mark - UIViewController
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -89,6 +92,14 @@
 	
 	_movePopoverContinuouslyWithGesture = YES;
 }
+
+- (BOOL)prefersStatusBarHidden
+{
+	return YES;
+}
+
+
+#pragma mark - Gesture
 
 - (void)didPinch:(id)sender
 {
@@ -209,6 +220,9 @@
 	// Make sure it's an appropriate distance away from edges
 	_zoomPercentage.frame = [self getRectWithinScreen:_zoomPercentage.frame];
 }
+
+
+#pragma mark - UIViewController Misc.
 
 - (void)didReceiveMemoryWarning
 {
