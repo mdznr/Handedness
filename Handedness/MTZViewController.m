@@ -184,6 +184,8 @@
 				[self movePopoverAwayFromPoint:[sender locationInView:self.view]
 								 forHandedness:sender.hand];
 			}
+			
+			break;
 		case UIGestureRecognizerStateEnded:
 		case UIGestureRecognizerStateCancelled:
 		default:
