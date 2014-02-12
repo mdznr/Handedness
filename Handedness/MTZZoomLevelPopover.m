@@ -90,11 +90,7 @@ static const CGFloat cornerRadius = 4.0f;
 	_label.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 	_label.textAlignment = NSTextAlignmentCenter;
 	_label.textColor = [UIColor whiteColor];
-	if ( [UIFont instancesRespondToSelector:@selector(preferredFontForTextStyle:)] ) {
-		_label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-	} else {
-		_label.font = [UIFont boldSystemFontOfSize:18.0f];
-	}
+	_label.font = [UIFont boldSystemFontOfSize:18.0f];
 	_label.numberOfLines = 1;
 	_label.backgroundColor = [UIColor clearColor];
 	_label.opaque = NO;
