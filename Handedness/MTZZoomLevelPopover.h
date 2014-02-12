@@ -37,9 +37,13 @@
 
 @interface MTZZoomLevelPopover : UIView
 
+/// The zoom level.
 @property (nonatomic) CGFloat zoomLevel;
 
+/// Hide the popover.
 - (void)hide;
+
+/// Show the popover.
 - (void)show;
 
 @end

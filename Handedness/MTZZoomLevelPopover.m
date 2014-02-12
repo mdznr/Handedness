@@ -36,6 +36,9 @@
 #import "MTZZoomLevelPopover.h"
 #import <QuartzCore/QuartzCore.h>
 
+/// The corner radius to use for the popover.
+static const CGFloat cornerRadius = 4.0f;
+
 @interface MTZZoomLevelPopover ()
 
 @property (strong, nonatomic) UILabel *label;
@@ -43,6 +46,9 @@
 @end
 
 @implementation MTZZoomLevelPopover
+
+
+#pragma mark - Initialization
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -74,10 +80,12 @@
 - (void)setup
 {
 	self.userInteractionEnabled = NO;
+	
+	// A rounded-rect semi-transparent black background.
 	self.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.75];
+	self.layer.cornerRadius = cornerRadius;
 	
-	self.layer.cornerRadius = 4.0f;
-	
+	// Zoom Level label.
 	_label = [[UILabel alloc] initWithFrame:self.bounds];
 	_label.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 	_label.textAlignment = NSTextAlignmentCenter;
@@ -92,54 +100,12 @@
 	_label.opaque = NO;
 	[self addSubview:_label];
 	
+	// Hidden by default.
 	self.hidden = YES;
-	
-	if ( &UIContentSizeCategoryDidChangeNotification != nil ) {
-		// Listen to UIContentSizeCategoryDidChangeNotification (Dynamic Type)
-		[[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(preferredContentSizeDidChange:)
-													 name:UIContentSizeCategoryDidChangeNotification
-												   object:nil];
-	}
 }
 
-- (void)show
-{
-	self.alpha = 1.0f;
-	self.hidden = NO;
-}
 
-- (void)hide
-{
-	if ( [UIView instancesRespondToSelector:@selector(animateWithDuration:delay:usingSpringWithDamping:initialSpringVelocity:options:animations:completion:)] ) {
-		[UIView animateWithDuration:0.15f
-							  delay:0.0f
-			 usingSpringWithDamping:1.0f
-			  initialSpringVelocity:1.0f
-							options:UIViewAnimationOptionBeginFromCurrentState
-						 animations:^{
-							 self.alpha = 0.0f;
-						 }
-						 completion:^(BOOL finished) {
-							 [self setHidden];
-						 }];
-	} else {
-		[UIView animateWithDuration:0.15f
-							  delay:0.0f
-							options:UIViewAnimationOptionBeginFromCurrentState
-						 animations:^{
-							 self.alpha = 0.0f;
-						 } completion:^(BOOL finished) {
-							 [self setHidden];
-						 }];
-	}
-}
-
-- (void)setHidden
-{
-	self.hidden = YES;
-	self.alpha = 1.0f;
-}
+#pragma mark - Properties
 
 - (void)setZoomLevel:(CGFloat)zoomLevel
 {
@@ -152,20 +118,64 @@
 	CGFloat scale = [UIScreen mainScreen].scale;
 	
 	self.bounds = (CGRect){0, 0,
-		                   round(rect.size.width  * scale)/scale + 16,
-		                   round(rect.size.height * scale)/scale + 10};
+		round(rect.size.width  * scale)/scale + 16,
+		round(rect.size.height * scale)/scale + 10};
 	
 	_label.center = (CGPoint){round((self.bounds.size.width /2) * scale)/scale,
-		                      round((self.bounds.size.height/2) * scale)/scale};
+		round((self.bounds.size.height/2) * scale)/scale};
 	
 	_zoomLevel = zoomLevel;
 }
 
-// Dynamic type size changed
-- (void)preferredContentSizeDidChange:(id)sender
+
+#pragma mark - Public API
+
+- (void)show
 {
-	_label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-#warning Do other things need to be changed?
+	[self actuallyShow];
+}
+
+- (void)hide
+{
+	// Using spring animation, if available.
+	if ( [UIView instancesRespondToSelector:@selector(animateWithDuration:delay:usingSpringWithDamping:initialSpringVelocity:options:animations:completion:)] ) {
+		[UIView animateWithDuration:0.15f
+							  delay:0.0f
+			 usingSpringWithDamping:1.0f
+			  initialSpringVelocity:1.0f
+							options:UIViewAnimationOptionBeginFromCurrentState
+						 animations:^{
+							 self.alpha = 0.0f;
+						 }
+						 completion:^(BOOL finished) {
+							 [self actuallyHide];
+						 }];
+	} else {
+		[UIView animateWithDuration:0.15f
+							  delay:0.0f
+							options:UIViewAnimationOptionBeginFromCurrentState
+						 animations:^{
+							 self.alpha = 0.0f;
+						 }
+						 completion:^(BOOL finished) {
+							 [self actuallyHide];
+						 }];
+	}
+}
+
+
+#pragma mark - Private API
+
+- (void)actuallyShow
+{
+	self.alpha = 1.0f;
+	self.hidden = NO;
+}
+
+- (void)actuallyHide
+{
+	self.hidden = YES;
+	self.alpha = 1.0f;
 }
 
 @end
