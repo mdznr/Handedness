@@ -109,12 +109,12 @@ static const CGFloat cornerRadius = 4.0f;
 	_label.text = [NSString stringWithFormat:@"%.0f%%", 100 * zoomLevel];
 	
 	// Fit and center around label width.
-	CGRect rect = [_label textRectForBounds:CGRectInfinite limitedToNumberOfLines:1];
+	CGRect textRect = [_label textRectForBounds:CGRectInfinite limitedToNumberOfLines:1];
 	
 	CGFloat scale = [UIScreen mainScreen].scale;
 	self.bounds = CGRectMake(0, 0,
-							 round(rect.size.width  * scale)/scale + 16,
-							 round(rect.size.height * scale)/scale + 10);
+							 round(textRect.size.width  * scale)/scale + 16,
+							 round(textRect.size.height * scale)/scale + 10);
 	
 	_label.center = CGPointMake(round((self.bounds.size.width /2) * scale)/scale,
 								round((self.bounds.size.height/2) * scale)/scale);
